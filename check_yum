@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/python
+# coding=utf-8
 
 """Nagios plugin to check the YUM package management system for package updates.
    Can optionally alert on any available updates as well as just
@@ -576,7 +577,7 @@ if __name__ == "__main__":
 
 
 
-#Copyright © 2008–2012, Hari Sekhon <harisekhon@gmail.com>.
+#Copyright © ?–?, Hari Sekhon <harisekhon@gmail.com>.
 #Copyright © 2012, Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>.
 #All rights reserved.
 #
