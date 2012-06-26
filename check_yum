@@ -430,7 +430,7 @@ class YumTester:
                                                     % number_security_updates
     
         if number_other_updates != 0:
-            if self.warn_on_any_update == True and status != CRITICAL:
+            if self.warn_on_any_update and status != CRITICAL:
                 status = WARNING
             if number_other_updates == 1:
                 message += ". 1 Non-Security Update Available"
