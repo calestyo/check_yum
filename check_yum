@@ -6,7 +6,7 @@
    security related updates"""
 
 __title__   = "check_yum"
-__version__ = "0.8.0"
+__version__ = "0.9.0"
 
 # Standard Nagios return codes
 OK       = 0
@@ -71,6 +71,7 @@ class YumTester:
         self.all_updates        = False
         self.no_cache_update    = False
         self.no_warn_on_lock    = False
+        self.no_warn_on_updates = False
         self.enable_repo        = ""
         self.disable_repo       = ""
         self.timeout            = DEFAULT_TIMEOUT
@@ -399,7 +400,10 @@ class YumTester:
             status = OK
             message = "0 Updates Available"
         else:
-            status = CRITICAL
+            if self.no_warn_on_updates:
+                status = OK
+            else:
+                status = CRITICAL
             if number_updates == 1:
                 message = "1 Update Available"
             else:
@@ -421,7 +425,10 @@ class YumTester:
             status = OK
             message = "0 Security Updates Available"
         else:
-            status = CRITICAL
+            if self.no_warn_on_updates:
+                status = OK
+            else:
+                status = CRITICAL
             if number_security_updates == 1:
                 message = "1 Security Update Available"
             elif number_security_updates > 1:
@@ -430,7 +437,11 @@ class YumTester:
     
         if number_other_updates != 0:
             if self.warn_on_any_update and status != CRITICAL:
-                status = WARNING
+                if self.no_warn_on_updates:
+                    status = OK
+                else:
+                    status = WARNING
+
             if number_other_updates == 1:
                 message += ". 1 Non-Security Update Available"
             else:
@@ -498,6 +509,15 @@ def main():
                           + "intermittently pop up when someone is running "   \
                           + "YUM interactively for package management")
 
+    parser.add_option( "--no-warn-on-updates",
+                       action="store_true",
+                       dest="no_warn_on_updates",
+                       help="Return OK instead of WARNING even when updates "\
+                          + "are available. This is not recommended from "   \
+                          + "the security standpoint, but may be wanted to " \
+                          + "disable alerts while the plugin output still "  \
+                          + "shows the number of available updates.")
+
     parser.add_option( "--enablerepo",
                        dest="repository_to_enable",
                        help="Explicitly enables a reposity when calling YUM. "
@@ -539,6 +559,7 @@ def main():
     tester.all_updates                 = options.all_updates
     tester.no_cache_update             = options.no_cache_update
     tester.no_warn_on_lock             = options.no_warn_on_lock
+    tester.no_warn_on_updates          = options.no_warn_on_updates
     tester.enable_repo                 = options.repository_to_enable
     tester.disable_repo                = options.repository_to_disable
     tester.timeout                     = options.timeout
