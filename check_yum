@@ -420,11 +420,11 @@ def main():
 	
 	parser.add_option("--enablerepo",
 	                  dest="repository_to_enable",
-	                  help="Explicitly enables a reposity when calling YUM. Can take a comma separated list of repositories.")
+	                  help="Explicitly enables a reposity when calling YUM. Can take a comma separated list of repositories. Note that enabling repositories can lead to unexpected results, for example when protected repositories are enabled.")
 	
 	parser.add_option("--disablerepo",
 	                  dest="repository_to_disable",
-	                  help="Explicitly disables a repository when calling YUM. Can take a comma separated list of repositories.")
+	                  help="Explicitly disables a repository when calling YUM. Can take a comma separated list of repositories. Note that disabling repositories can lead to unexpected results, for example when protected repositories are disabled.")
 	
 	parser.add_option("-t", "--timeout",
 	                  dest="timeout",
