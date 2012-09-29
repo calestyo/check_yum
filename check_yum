@@ -199,7 +199,7 @@ class YumTester:
 		discarded = discarded2
 		discarded2 = discarded
 		
-		end(CRITICAL, "Yum nagios plugin has self terminated after exceeding the timeout (%s seconds)" % self.timeout)
+		end(UNKNOWN, "Yum nagios plugin has self terminated after exceeding the timeout (%s seconds)" % self.timeout)
 	
 	
 	def get_updates(self):
