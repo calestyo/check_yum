@@ -27,21 +27,21 @@ from optparse import OptionParser
 DEFAULT_TIMEOUT = 30
 
 
-def end(status, message, perfdata=''):
+def end(status, message, perfdata=""):
 	"""Exits the plugin with first arg as the return code and the second arg as the message to output."""
 	
-	check = "YUM "
+	if perfdata:
+		print "%s | %s" % (message, perfdata)
+	else:
+		print "%s" % message
+	
 	if status == OK:
-		print "%sOK: %s | %s" % (check, message, perfdata)
 		sys.exit(OK)
 	elif status == WARNING:
-		print "%sWARNING: %s | %s" % (check, message, perfdata)
 		sys.exit(WARNING)
 	elif status == CRITICAL:
-		print "%sCRITICAL: %s | %s" % (check, message, perfdata)
 		sys.exit(CRITICAL)
 	else:
-		print "UNKNOWN: %s" % message
 		sys.exit(UNKNOWN)
 
 
