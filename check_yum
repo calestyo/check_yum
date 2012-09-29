@@ -4,7 +4,7 @@
 """Nagios plugin to check the YUM package management system for package updates. Can optionally alert on any available updates as well as just security related updates."""
 
 __title__ = "check_yum"
-__version__ = "0.9.0"
+__version__ = "1.0.0"
 
 #Standard Nagios return codes
 OK = 0
