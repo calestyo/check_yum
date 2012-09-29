@@ -396,22 +396,22 @@ def main():
 	parser.add_option("--all-updates",
 	                  action="store_true",
 	                  dest="all_updates",
-	                  help="Does not distinguish between security and non-security updates, but returns critical for any available update. This may be used if the YUM security plugin is absent or you want to maintain every single package at the latest version. You may want to use --warn-on-any-update instead of this option")
+	                  help="Does not distinguish between security and non-security updates, but returns critical for any available update. This may be used if the YUM security plugin is absent or you want to maintain every single package at the latest version. You may want to use --warn-on-any-update instead of this option.")
 	
 	parser.add_option("--warn-on-any-update",
 	                  action="store_true",
 	                  dest="warn_on_any_update",
-	                  help="Warns if there are any (non-security) package updates available. By default only warns when security related updates are available. If --all-updates is used, then this option is redundant as --all-updates will return a critical result on any available update, whereas using this switch still allows you to differentiate between the severity of updates")
+	                  help="Warns if there are any (non-security) package updates available. By default only warns when security related updates are available. If --all-updates is used, then this option is redundant as --all-updates will return a critical result on any available update, whereas using this switch still allows you to differentiate between the severity of updates.")
 	
 	parser.add_option("-C", "--cache-only",
 	                  action="store_true",
 	                  dest="no_cache_update",
-	                  help="Run entirely from cache and do not update the cache when running YUM. Useful if you have 'yum makecache' cronned so that the nagios check itself doesn't have to do it, possibly speeding up execution (by 1-2 seconds in tests)")
+	                  help="Run entirely from cache and do not update the cache when running YUM. Useful if you have 'yum makecache' cronned so that the nagios check itself doesn't have to do it, possibly speeding up execution (by 1-2 seconds in tests).")
 	
 	parser.add_option("--no-warn-on-lock",
 	                  action="store_true",
 	                  dest="no_warn_on_lock",
-	                  help="Return OK instead of WARNING when YUM is locked and fails to check for updates due to another instance running. This is not recommended from the security standpoint, but may be wanted to reduce the number of alerts that may intermittently pop up when someone is running YUM interactively for package management")
+	                  help="Return OK instead of WARNING when YUM is locked and fails to check for updates due to another instance running. This is not recommended from the security standpoint, but may be wanted to reduce the number of alerts that may intermittently pop up when someone is running YUM interactively for package management.")
 	
 	parser.add_option("--no-warn-on-updates",
 	                  action="store_true",
@@ -420,11 +420,11 @@ def main():
 	
 	parser.add_option("--enablerepo",
 	                  dest="repository_to_enable",
-	                  help="Explicitly enables a reposity when calling YUM. Can take a comma separated list of repositories")
+	                  help="Explicitly enables a reposity when calling YUM. Can take a comma separated list of repositories.")
 	
 	parser.add_option("--disablerepo",
 	                  dest="repository_to_disable",
-	                  help="Explicitly disables a repository when calling YUM Can take a comma separated list of repositories")
+	                  help="Explicitly disables a repository when calling YUM Can take a comma separated list of repositories.")
 	
 	parser.add_option("-t", "--timeout",
 	                  dest="timeout",
@@ -433,12 +433,12 @@ def main():
 	parser.add_option("-v", "--verbose",
 	                  action="count",
 	                  dest="verbosity",
-	                  help="Verbose mode. Can be used multiple times to increase output. Use -vvv for debugging output. By default only one result line is printed as per Nagios standards")
+	                  help="Verbose mode. Can be used multiple times to increase output. Use -vvv for debugging output. By default only one result line is printed as per Nagios standards.")
 	
 	parser.add_option("-V", "--version",
 	                  action="store_true",
 	                  dest="version",
-	                  help="Print version number and exit")
+	                  help="Print version number and exit.")
 	
 	(options, args) = parser.parse_args()
 	
