@@ -24,7 +24,7 @@ except ImportError:
 	import commands
 from optparse import OptionParser
 
-DEFAULT_TIMEOUT = 30
+DEFAULT_TIMEOUT = 55
 
 
 def end(status, message, perfdata=""):
