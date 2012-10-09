@@ -439,8 +439,7 @@ def main():
 	(options, args) = parser.parse_args()
 	
 	if args:
-		parser.print_help()
-		sys.exit(UNKNOWN)
+		end(UNKNOWN, "Invalid arguments specified.")
 	
 	tester.all_updates        = options.all_updates
 	tester.no_cache_update    = options.no_cache_update
