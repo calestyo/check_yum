@@ -188,16 +188,12 @@ class YumTester:
 		else:
 			self.vprint(3, "setting plugin timeout to %s seconds" % self.timeout)
 		
-		signal.signal(signal.SIGALRM, self.sighandler)
+		signal.signal(signal.SIGALRM, self.timeout_signal_handler)
 		signal.alarm(self.timeout)
 	
 	
-	def sighandler(self, discarded, discarded2):
+	def timeout_signal_handler(self, signum, frame):
 		"""Function to be called by signal.alarm to kill the plugin."""
-		
-		#Nop for these variables
-		discarded = discarded2
-		discarded2 = discarded
 		
 		end(UNKNOWN, "YUM nagios plugin has self terminated after exceeding the timeout (%s seconds)" % self.timeout)
 	
