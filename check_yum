@@ -464,7 +464,7 @@ if __name__ == "__main__":
 	try:
 		main()
 	except SystemExit:
-		pass
+		raise
 	except:
 		end(UNKNOWN, "check_yum failed for unknown reasons.")
 
