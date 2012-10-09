@@ -25,6 +25,9 @@ except ImportError:
 from optparse import OptionParser
 
 DEFAULT_TIMEOUT = 55
+YUM = "/usr/bin/yum"
+
+
 
 
 def end(status, message, perfdata=""):
@@ -44,8 +47,6 @@ def end(status, message, perfdata=""):
 	else:
 		sys.exit(UNKNOWN)
 
-
-YUM = "/usr/bin/yum"
 
 def check_yum_usable():
 	"""Checks that the YUM program and path are correct and usable - that the program exists and is executable, otherwise exits with error."""
