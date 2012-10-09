@@ -467,9 +467,10 @@ def main():
 if __name__ == "__main__":
 	try:
 		main()
-	except KeyboardInterrupt:
-		print "Caught Control-C..."
-		sys.exit(CRITICAL)
+	except SystemExit:
+		pass
+	except:
+		end(UNKNOWN, "check_yum failed for unknown reasons.")
 
 
 
