@@ -71,6 +71,7 @@ class YumTester:
 		self.no_warn_on_updates = False
 		self.enable_repo        = ""
 		self.disable_repo       = ""
+		self.installroot        = ""
 		self.timeout            = DEFAULT_TIMEOUT
 		self.verbosity          = 0
 		self.warn_on_any_update = False
@@ -105,6 +106,8 @@ class YumTester:
 		if cmd == "" or cmd == None:
 			end(UNKNOWN, "Internal python error - no cmd supplied for run function")
 		
+		if self.installroot:
+			cmd += " --installroot=%s" % self.installroot
 		if self.no_cache_update:
 			cmd += " -C"
 		
@@ -423,6 +426,10 @@ def main():
 	                  dest="repository_to_disable",
 	                  help="Explicitly disables a repository when calling YUM. Can take a comma separated list of repositories. Note that disabling repositories can lead to unexpected results, for example when protected repositories are disabled.")
 	
+	parser.add_option("--installroot",
+	                  dest="installroot",
+	                  help="Specifies another installation root directory (for example a chroot). See also --installroot in yum(8).")
+	
 	parser.add_option("-t", "--timeout",
 	                  dest="timeout",
 	                  help="Sets a timeout in seconds after which the plugin will exit (defaults to %s seconds)." % DEFAULT_TIMEOUT)
@@ -448,6 +455,7 @@ def main():
 	tester.no_warn_on_updates = options.no_warn_on_updates
 	tester.enable_repo        = options.repository_to_enable
 	tester.disable_repo       = options.repository_to_disable
+	tester.installroot        = options.installroot
 	tester.timeout            = options.timeout
 	tester.verbosity          = options.verbosity
 	tester.warn_on_any_update = options.warn_on_any_update
