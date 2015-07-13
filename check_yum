@@ -332,6 +332,7 @@ class YumTester:
 		if number_updates == 0:
 			status = OK
 			message = "0 Updates Available"
+			perfdata = "updates=0"
 		else:
 			if self.no_warn_on_updates:
 				status = OK
@@ -339,10 +340,12 @@ class YumTester:
 				status = CRITICAL
 			if number_updates == 1:
 				message = "1 Update Available"
+				perfdata = "updates=1"
 			else:
 				message = "%s Updates Available" % number_updates
+				perfdata = "updates=%s" % number_updates
 		
-		return status, message
+		return status, message, perfdata
 	
 	
 	def test_security_updates(self):
@@ -355,6 +358,7 @@ class YumTester:
 		if number_security_updates == 0:
 			status = OK
 			message = "0 Security Updates Available"
+			perfdata = "security_updates=0"
 		else:
 			if self.no_warn_on_updates:
 				status = OK
@@ -362,8 +366,10 @@ class YumTester:
 				status = CRITICAL
 			if number_security_updates == 1:
 				message = "1 Security Update Available"
+				perfdata = "security_updates=1"
 			elif number_security_updates > 1:
 				message = "%s Security Updates Available" % number_security_updates
+				perfdata = "security_updates=%s" % number_security_updates
 		
 		if number_other_updates != 0:
 			if self.warn_on_any_update and status != CRITICAL:
@@ -374,10 +380,14 @@ class YumTester:
 			
 			if number_other_updates == 1:
 				message += ". 1 Non-Security Update Available"
+				perfdata += " updates=1"
 			else:
 				message += ". %s Non-Security Updates Available" % number_other_updates
+				perfdata += " updates=%s" % number_other_updates
+		else:
+			perfdata += " updates=0"
 		
-		return status, message
+		return status, message, perfdata
 	
 	
 	def vprint(self, threshold, message):
@@ -464,8 +474,8 @@ def main():
 		print "%s - Version %s\n" % (__title__, __version__)
 		sys.exit(OK)
 	
-	result, output = tester.test_yum_updates()
-	end(result, output)
+	result, output, perfdata = tester.test_yum_updates()
+	end(result, output, perfdata)
 
 
 if __name__ == "__main__":
