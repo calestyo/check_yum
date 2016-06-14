@@ -262,6 +262,12 @@ class YumTester:
 		cmd = "%s --security check-update" % YUM
 		
 		output = self.run(cmd)
+		output2 = "\n".join(output).split("\n\n")
+
+		if len(output2) == 2:
+			extra_lines = output2[1].split("\n")
+		else:
+			extra_lines = []
 		
 		re_security_summary_rhel5 = re.compile("Needed \d+ of \d+ packages, for security")
 		re_security_summary_rhel6 = re.compile("\d+ package\(s\) needed for security, out of \d+ available")
@@ -301,7 +307,10 @@ class YumTester:
 		
 		number_other_updates = number_total_updates - number_security_updates
 		
-		if len(output) > number_total_updates + 25:
+		relevant_lines = len(output) - len(extra_lines)
+		expected_lines = number_total_updates + 25
+
+		if relevant_lines > expected_lines:
 			end(WARNING, "YUM output signature is larger than current known format, please make sure you have upgraded to the latest version of this plugin. If the problem persists, please contact the author for a fix")
 		
 		return number_security_updates, number_other_updates
