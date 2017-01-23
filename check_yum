@@ -262,46 +262,36 @@ class YumTester:
 		cmd = "%s --security check-update" % YUM
 		
 		output = self.run(cmd)
-		
-		re_security_summary_rhel5 = re.compile("Needed \d+ of \d+ packages, for security")
-		re_security_summary_rhel6 = re.compile("\d+ package\(s\) needed for security, out of \d+ available")
-		re_no_security_updates_available_rhel5 = re.compile("No packages needed, for security, \d+ available")
-		re_no_security_updates_available_rhel6 = re.compile("No packages needed for security; \d+ packages available")
+
+		patterns = [
+			# RHEL5
+			re.compile("Needed (?P<sec>\d+) of (?P<tot>\d+) packages, for security"),
+			re.compile("No packages needed, for security, (?P<tot>\d+) available"),
+			# RHEL6
+			re.compile("(?P<sec>\d+) package\(s\) needed for security, out of (?P<tot>\d+) available"),
+			re.compile("No packages needed for security; (?P<tot>\d+) packages available")
+		]
+		excluded = re.compile(" --> \S+ from \S+ excluded")
 		summary_line_found = False
+		excluded_packages_found = 0
 		for line in output:
-			if re_no_security_updates_available_rhel5.match(line):
-				summary_line_found = True
-				number_security_updates = 0
-				number_total_updates = line.split()[5]
-				break
-			if re_no_security_updates_available_rhel6.match(line):
-				summary_line_found = True
-				number_security_updates = 0
-				number_total_updates = line.split()[5]
-				break
-			if re_security_summary_rhel5.match(line):
-				summary_line_found = True
-				number_security_updates = line.split()[1]
-				number_total_updates = line.split()[3]
-				break
-			if re_security_summary_rhel6.match(line):
-				summary_line_found = True
-				number_security_updates = line.split()[0]
-				number_total_updates = line.split()[7]
-				break
+			if excluded.match(line):
+				excluded_packages_found += 1
+				continue
+			for patt in patterns:
+				m = patt.match(line)
+				if m:
+					summary_line_found = True
+					number_security_updates = int(m.groupdict().get('sec', 0))
+					# The capture group named 'tot' is mandatory
+					number_total_updates = int(m.groupdict().get('tot'))
 		
 		if not summary_line_found:
 			end(WARNING, "Cannot find summary line in YUM output. Please make sure you have upgraded to the latest version of this plugin. If the problem persists, please contact the author for a fix")
 		
-		try:
-			number_security_updates = int(number_security_updates)
-			number_total_updates = int(number_total_updates)
-		except ValueError:
-			end(WARNING, "Error parsing package information, YUM output may have changed. Please make sure you have upgraded to the latest version of this plugin. If the problem persists, the please contact the author for a fix")
-		
 		number_other_updates = number_total_updates - number_security_updates
 		
-		if len(output) > number_total_updates + 25:
+		if len(output) > number_total_updates + excluded_packages_found + 25:
 			end(WARNING, "YUM output signature is larger than current known format, please make sure you have upgraded to the latest version of this plugin. If the problem persists, please contact the author for a fix")
 		
 		return number_security_updates, number_other_updates
